@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('chapters', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->foreignId('course_id')->constrained('courses')->onDelete('cascade');
+            $table->uuid('course_id');
+            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
             $table->integer('sort_order')->default(0);
             $table->integer('status')->default(1);
             $table->timestamps();

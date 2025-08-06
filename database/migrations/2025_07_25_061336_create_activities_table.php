@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('course_id')->constrained()->onDelete('cascade');
+            $table->uuid('course_id');
+            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
             $table->foreignId('chapter_id')->constrained()->onDelete('cascade');
             $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
             $table->enum('is_completed', ['yes', 'no'])->default('no');

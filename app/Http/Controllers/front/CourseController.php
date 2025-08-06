@@ -38,7 +38,41 @@ class CourseController extends Controller
 
         return response()->json([
             'status' => 200,
+            'data' => $course,
             'message' => 'Course has been created successfully',
+        ], 200);
+    }
+
+    public function show($id)
+    {
+        $course = Course::find($id);
+
+        if (!$course) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Course not found',
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'data' => $course,
+        ], 200);
+    }
+
+    // This method will return categories/levels/languages
+    public function metaData() {
+        $categories = \App\Models\Category::get();
+        $levels = \App\Models\Level::get();
+        $languages = \App\Models\Language::get();
+
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'categories' => $categories,
+                'levels' => $levels,
+                'languages' => $languages,
+            ],
         ], 200);
     }
 }
