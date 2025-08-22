@@ -2,30 +2,30 @@
 
 namespace App\Http\Controllers\front;
 
-use App\Http\Controllers\Controller;
-use App\Models\Outcome;
+use App\Models\Requirement;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
-class OutcomeController extends Controller
+class RequirementController extends Controller
 {
-    // This Method will return all outComes of a course
+    // This Method will return all requirements of a course
     public function index(Request $request)
     {
-        $outcomes = Outcome::where('course_id', $request->course_id)->orderBy('sort_order')->get();
+        $requirements = Requirement::where('course_id', $request->course_id)->orderBy('sort_order')->get();
 
         return response()->json([
             'status' => 200,
-            'data' => $outcomes
+            'data' => $requirements
         ], 200);
     }
 
-    // This method will store/save a outcome
+    // This method will store/save a requirement
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'course_id' => 'required',
-            'outcome' => 'required|string|max:255',
+            'requirement' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -35,32 +35,32 @@ class OutcomeController extends Controller
             ], 400);
         }
 
-        $outcome = new Outcome();
-        $outcome->course_id = $request->course_id;
-        $outcome->text = $request->outcome;
-        $outcome->sort_order = 1000;
-        $outcome->save();
+        $requirement = new Requirement();
+        $requirement->course_id = $request->course_id;
+        $requirement->text = $request->requirement;
+        $requirement->sort_order = 1000;
+        $requirement->save();
 
         return response()->json([
             'status' => 201,
-            'message' => 'Outcome created successfully'
+            'message' => 'Requirement created successfully'
         ], 201);
     }
 
     // This method will update a outcome
     public function update(Request $request, $id)
     {
-        $outcome = Outcome::find($id);
+        $requirement = Requirement::find($id);
 
-        if (!$outcome) {
+        if (!$requirement) {
             return response()->json([
                 'status' => 404,
-                'message' => 'Outcome not found'
+                'message' => 'Requirement not found'
             ], 404);
         }
 
         $validator = Validator::make($request->all(), [
-            'outcome' => 'required|string|max:255',
+            'requirement' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -70,40 +70,40 @@ class OutcomeController extends Controller
             ], 400);
         }
 
-        $outcome->text = $request->outcome;
-        $outcome->save();
+        $requirement->text = $request->requirement;
+        $requirement->save();
 
         return response()->json([
             'status' => 200,
-            'message' => 'Outcome updated successfully'
+            'message' => 'Requirement updated successfully'
         ], 200);
     }
 
-    // This method will delete a outcome
+    // This method will delete a requirement
     public function destroy($id)
     {
-        $outcome = Outcome::find($id);
+        $requirement = Requirement::find($id);
 
-        if (!$outcome) {
+        if (!$requirement) {
             return response()->json([
                 'status' => 404,
-                'message' => 'Outcome not found'
+                'message' => 'Requirement not found'
             ], 404);
         }
 
-        $outcome->delete();
+        $requirement->delete();
 
         return response()->json([
             'status' => 200,
-            'message' => 'Outcome deleted successfully'
+            'message' => 'Requirement deleted successfully'
         ], 200);
     }
 
-    public function sortOutcomes (Request $request) 
+    public function sortRequirements(Request $request)
     {
-        if (!empty($request->outcomes)) {
-            foreach ($request->outcomes as $key => $outcomeId) {
-                $outcome = Outcome::where('id', $outcomeId)->update(['sort_order' => $key]);
+        if (!empty($request->requirements)) {
+            foreach ($request->requirements as $key => $requirementId) {
+                $requirement = Requirement::where('id', $requirementId)->update(['sort_order' => $key]);
             }
         }
 
